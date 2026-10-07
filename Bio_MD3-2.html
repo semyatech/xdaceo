@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>xdaceo</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ---------- Material 3 color roles ---------- */
+:root{
+  --md-primary:#415f91;--md-on-primary:#fff;
+  --md-primary-container:#d6e3ff;--md-on-primary-container:#001b3e;
+  --md-secondary-container:#dbe2f9;--md-on-secondary-container:#141b2c;
+  --md-surface:#f9f9ff;--md-on-surface:#191c20;--md-on-surface-variant:#44474e;
+  --md-sc-low:#f3f3fa;--md-sc:#edeef4;--md-sc-high:#e7e8ee;
+  --md-outline-variant:#c4c6d0;--md-scrim:rgba(0,0,0,.32);
+  --md-shadow:0 1px 2px rgba(0,0,0,.3),0 2px 6px 2px rgba(0,0,0,.15);
+  --md-easing:cubic-bezier(.2,0,0,1);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --md-primary:#aac7ff;--md-on-primary:#0a305f;
+  --md-primary-container:#284777;--md-on-primary-container:#d6e3ff;
+  --md-secondary-container:#3f4759;--md-on-secondary-container:#dbe2f9;
+  --md-surface:#111318;--md-on-surface:#e2e2e9;--md-on-surface-variant:#c4c6d0;
+  --md-sc-low:#191c20;--md-sc:#1d2024;--md-sc-high:#282a2f;
+  --md-outline-variant:#44474e;--md-scrim:rgba(0,0,0,.5);
+}}
+:root[data-theme="dark"]{
+  --md-primary:#aac7ff;--md-on-primary:#0a305f;
+  --md-primary-container:#284777;--md-on-primary-container:#d6e3ff;
+  --md-secondary-container:#3f4759;--md-on-secondary-container:#dbe2f9;
+  --md-surface:#111318;--md-on-surface:#e2e2e9;--md-on-surface-variant:#c4c6d0;
+  --md-sc-low:#191c20;--md-sc:#1d2024;--md-sc-high:#282a2f;
+  --md-outline-variant:#44474e;--md-scrim:rgba(0,0,0,.5);
+}
+
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{
+  background:var(--md-surface);color:var(--md-on-surface);
+  font-family:"Google Sans Flex","Google Sans","Product Sans",Figtree,system-ui,sans-serif;
+  font-weight:700;-webkit-font-smoothing:antialiased;
+  display:grid;place-items:center;padding:24px;min-height:100dvh;
+  transition:background-color .3s var(--md-easing),color .3s var(--md-easing);
+}
+main{width:100%;max-width:400px;display:flex;flex-direction:column;gap:24px}
+
+/* ---------- Profile header ---------- */
+.profile{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+h1{font-size:36px;line-height:44px;font-weight:700;letter-spacing:0}
+.subtitle{font-size:16px;line-height:24px;letter-spacing:.5px;color:var(--md-on-surface-variant);margin-top:4px}
+
+/* ---------- List ---------- */
+.list{list-style:none;padding:8px;background:var(--md-sc);border-radius:28px;display:flex;flex-direction:column;gap:2px}
+.item{
+  position:relative;display:flex;align-items:center;gap:16px;width:100%;
+  min-height:72px;padding:12px 16px;border:0;border-radius:20px;
+  background:transparent;color:var(--md-on-surface);text-decoration:none;
+  font:inherit;text-align:left;cursor:pointer;overflow:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+.list li:first-child .item{border-radius:20px 20px 8px 8px}
+.list li:last-child .item{border-radius:8px 8px 20px 20px}
+.item::before{ /* state layer */
+  content:"";position:absolute;inset:0;background:currentColor;opacity:0;
+  transition:opacity .2s var(--md-easing);pointer-events:none;
+}
+.item:hover::before{opacity:.08}
+.item:focus-visible{outline:3px solid var(--md-primary);outline-offset:-3px}
+.item:focus-visible::before,.item:active::before{opacity:.12}
+.lead{
+  flex:none;width:48px;height:48px;border-radius:50%;
+  background:var(--md-secondary-container);color:var(--md-on-secondary-container);
+  display:grid;place-items:center;
+}
+.lead svg{width:24px;height:24px;fill:currentColor}
+.text{flex:1;min-width:0;display:flex;flex-direction:column}
+.headline{font-size:16px;line-height:24px;font-weight:700;letter-spacing:.15px}
+.support{font-size:14px;line-height:20px;letter-spacing:.25px;color:var(--md-on-surface-variant);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.trail{flex:none;width:24px;height:24px;fill:var(--md-on-surface-variant)}
+
+/* ---------- Icon button (theme) ---------- */
+.topbar{position:fixed;top:max(12px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));z-index:20}
+.icon-btn{
+  position:relative;width:48px;height:48px;border:0;border-radius:50%;overflow:hidden;
+  background:var(--md-sc-high);color:var(--md-on-surface-variant);
+  display:grid;place-items:center;cursor:pointer;-webkit-tap-highlight-color:transparent;
+}
+.icon-btn::before{content:"";position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity .2s var(--md-easing)}
+.icon-btn:hover::before{opacity:.08}
+.icon-btn:active::before{opacity:.12}
+.icon-btn:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.icon-btn svg{width:24px;height:24px;fill:currentColor}
+.icon-btn .moon{display:none}
+:root[data-theme="light"] .icon-btn .sun{display:none}
+:root[data-theme="light"] .icon-btn .moon{display:block}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .icon-btn .sun{display:none}:root:not([data-theme="dark"]) .icon-btn .moon{display:block}}
+
+/* ---------- Dialog ---------- */
+dialog{
+  border:0;padding:24px 0 24px;margin:auto;width:calc(100% - 48px);max-width:400px;
+  background:var(--md-sc-high);color:var(--md-on-surface);border-radius:28px;
+  box-shadow:var(--md-shadow);
+  max-height:calc(100dvh - 48px);overflow-y:auto;
+}
+dialog::backdrop{background:var(--md-scrim)}
+dialog[open]{animation:dlg .3s var(--md-easing)}
+dialog[open]::backdrop{animation:fade .3s var(--md-easing)}
+@keyframes dlg{from{opacity:0;transform:scale(.92) translateY(12px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.dlg-icon{display:grid;place-items:center;margin-bottom:16px;color:var(--md-primary)}
+.dlg-icon svg{width:24px;height:24px;fill:currentColor}
+dialog h2{font-size:24px;line-height:32px;font-weight:700;text-align:center;padding:0 24px}
+.dlg-list{list-style:none;padding:16px 8px 0;display:flex;flex-direction:column}
+.dlg-row{display:flex;align-items:center;gap:16px;min-height:64px;padding:8px 16px}
+.dlg-row .lead{width:40px;height:40px}
+.dlg-row .lead svg{width:22px;height:22px}
+.dlg-row+.dlg-row,.dlg-list li+li{border-top:0}
+.actions{display:flex;justify-content:flex-end;padding:16px 24px 0}
+.text-btn{
+  position:relative;height:40px;padding:0 12px;border:0;border-radius:20px;overflow:hidden;
+  background:transparent;color:var(--md-primary);font:inherit;font-size:14px;font-weight:700;letter-spacing:.1px;cursor:pointer;
+}
+.text-btn::before{content:"";position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity .2s var(--md-easing)}
+.text-btn:hover::before{opacity:.08}
+.text-btn:focus-visible{outline:3px solid var(--md-primary);outline-offset:2px}
+.text-btn:active::before{opacity:.12}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,dialog[open],dialog[open]::backdrop{animation:none!important;transition:none!important}
+}
+</style></head><body>
+
+<div class="topbar">
+  <button class="icon-btn" id="themeBtn" type="button" aria-label="Сменить тему">
+    <svg class="sun" viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM2 13h2a1 1 0 0 0 0-2H2a1 1 0 0 0 0 2zm18 0h2a1 1 0 0 0 0-2h-2a1 1 0 0 0 0 2zM11 2v2a1 1 0 0 0 2 0V2a1 1 0 0 0-2 0zm0 18v2a1 1 0 0 0 2 0v-2a1 1 0 0 0-2 0zM5.99 4.58a1 1 0 0 0-1.41 1.41l1.06 1.06a1 1 0 0 0 1.41-1.41L5.99 4.58zm12.37 12.37a1 1 0 0 0-1.41 1.41l1.06 1.06a1 1 0 0 0 1.41-1.41l-1.06-1.06zm1.06-10.96a1 1 0 0 0-1.41-1.41l-1.06 1.06a1 1 0 0 0 1.41 1.41l1.06-1.06zM7.05 18.36a1 1 0 0 0-1.41-1.41l-1.06 1.06a1 1 0 0 0 1.41 1.41l1.06-1.06z"/></svg>
+    <svg class="moon" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+  </button>
+</div>
+
+<main>
+  <header class="profile">
+    <div>
+      <h1>xdaceo</h1>
+      <p class="subtitle">чуть-чуть админ the:resell / контент-мейкер</p>
+    </div>
+  </header>
+
+  <ul class="list">
+    <li><a class="item" href="https://t.me/xdaceo">
+      <span class="lead"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" transform="translate(12 12) scale(.92) translate(-12.85 -12.08)" d="M21.5 3.5 2.8 10.7c-.9.35-.88.86-.16 1.08l4.8 1.5 1.85 5.7c.23.62.12.87.77.87.5 0 .72-.23 1-.5l2.3-2.24 4.8 3.55c.88.49 1.52.24 1.74-.82l3.15-14.85c.32-1.3-.5-1.88-1.35-1.5zM9.4 13.9 18.2 7.6 11 15.6l-.3 2.8z"/></svg></span>
+      <span class="text"><span class="headline">Telegram</span><span class="support">@xdaceo</span></span>
+      <svg class="trail" viewBox="0 0 24 24"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+    </a></li>
+    <li><a class="item" href="https://tiktok.com/@semyatech">
+      <span class="lead"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></span>
+      <span class="text"><span class="headline">TikTok</span><span class="support">@semyatech</span></span>
+      <svg class="trail" viewBox="0 0 24 24"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+    </a></li>
+    <li><a class="item" href="https://www.youtube.com/@семятеч">
+      <span class="lead"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></span>
+      <span class="text"><span class="headline">YouTube</span><span class="support">@семятеч</span></span>
+      <svg class="trail" viewBox="0 0 24 24"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+    </a></li>
+    <li><button class="item" id="devicesBtn" type="button" aria-haspopup="dialog">
+      <span class="lead"><svg viewBox="0 0 24 24"><path d="M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z"/></svg></span>
+      <span class="text"><span class="headline">Девайсы</span><span class="support"></span></span>
+      <svg class="trail" viewBox="0 0 24 24"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+    </button></li>
+  </ul>
+</main>
+
+<dialog id="devicesDialog" aria-labelledby="devicesTitle">
+  <div class="dlg-icon"><svg viewBox="0 0 24 24"><path d="M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z"/></svg></div>
+  <h2 id="devicesTitle">Девайсы</h2>
+  <ul class="dlg-list">
+    <li class="dlg-row">
+      <span class="lead"><svg viewBox="0 0 24 24"><path d="M17 1.01 7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></span>
+      <span class="text"><span class="headline">Google Pixel 7</span><span class="support">телефон</span></span>
+    </li>
+    <li class="dlg-row">
+      <span class="lead"><svg viewBox="0 0 24 24"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></span>
+      <span class="text"><span class="headline">MacBook Air M2</span><span class="support">ноутбук</span></span>
+    </li>
+    <li class="dlg-row">
+      <span class="lead"><svg viewBox="0 0 24 24"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg></span>
+      <span class="text"><span class="headline">Ryzen 5 5500</span><span class="support" style="white-space:normal">32 GB · RX 5700 XT · ПК</span></span>
+    </li>
+    <li class="dlg-row">
+      <span class="lead"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M5 5h14a4 4 0 0 1 4 4v6a4 4 0 0 1-4 4H5a4 4 0 0 1-4-4V9a4 4 0 0 1 4-4zM8 7.5h8a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1zM2.5 12a1.5 1.5 0 1 0 3 0 1.5 1.5 0 1 0-3 0zM18.5 12a1.5 1.5 0 1 0 3 0 1.5 1.5 0 1 0-3 0z"/></svg></span>
+      <span class="text"><span class="headline">PS Vita Fat</span><span class="support">консоль</span></span>
+    </li>
+    <li class="dlg-row">
+      <span class="lead"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M4 6h16a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H4a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3zM7 8h10a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5H7a.5.5 0 0 1-.5-.5v-7A.5.5 0 0 1 7 8zM3.25 10.5h1v1h1v1h-1v1h-1v-1h-1v-1h1zM19 12a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0-2.5 0z"/></svg></span>
+      <span class="text"><span class="headline">PSP 3000</span><span class="support">консоль</span></span>
+    </li>
+    <li class="dlg-row">
+      <span class="lead"><svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M4 6h.5v12H4a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3zM20 6h-.5v12H20a3 3 0 0 0 3-3V9a3 3 0 0 0-3-3zM7 6h10a1.5 1.5 0 0 1 1.5 1.5v9A1.5 1.5 0 0 1 17 18H7a1.5 1.5 0 0 1-1.5-1.5v-9A1.5 1.5 0 0 1 7 6zM8 8.25h8a.5.5 0 0 1 .5.5v6.5a.5.5 0 0 1-.5.5H8a.5.5 0 0 1-.5-.5v-6.5a.5.5 0 0 1 .5-.5z"/></svg></span>
+      <span class="text"><span class="headline">Nintendo Switch Rev 2 UltraNX</span><span class="support">консоль</span></span>
+    </li>
+  </ul>
+  <div class="actions"><button class="text-btn" id="closeDevices" type="button">Закрыть</button></div>
+</dialog>
+
+<script>
+(function(){
+  const root=document.documentElement;
+  let saved=null;
+  try{saved=localStorage.getItem("theme")}catch(e){}
+  if(saved==="light"||saved==="dark") root.setAttribute("data-theme",saved);
+
+  document.getElementById("themeBtn").addEventListener("click",()=>{
+    const cur=root.getAttribute("data-theme");
+    const isLight=cur==="light"||(!cur&&matchMedia("(prefers-color-scheme:light)").matches);
+    const next=isLight?"dark":"light";
+    root.setAttribute("data-theme",next);
+    try{localStorage.setItem("theme",next)}catch(e){}
+  });
+
+  const dlg=document.getElementById("devicesDialog");
+  document.getElementById("devicesBtn").addEventListener("click",()=>dlg.showModal());
+  document.getElementById("closeDevices").addEventListener("click",()=>dlg.close());
+  dlg.addEventListener("click",e=>{if(e.target===dlg)dlg.close()});
+})();
+</script>
+</body></html>
